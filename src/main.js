@@ -1,4 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
+import axios from 'axios'
 
-createApp(App).mount('#app')
+axios.defaults.baseURL = 'http://localhost:8888';
+axios.defaults.withCredentials = true; // Send cookies and headers with each request
+
+createApp(App).use(router).mount('#app')
