@@ -3,13 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import  UserRegister from "../components/UserRegister";
 import  UserLogin  from "../components/UserLogin";
 import UserProfile from "../components/UserProfile";
-import AppNavbar  from "../components/AppNavbar";
+import HomeView from "../components/HomeView"
 
 const routes = [
   {
     path: '/',
-    name: 'Navbar',
-    component: AppNavbar
+    name: 'HomeView',
+    component: HomeView
   },
   {
     path: '/about',

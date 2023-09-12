@@ -1,4 +1,5 @@
 <template>
+  <!-- Login form -->
   <div>
     <h1>Login</h1>
     <form @submit.prevent="login">
@@ -10,7 +11,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+// Import the Vuex store to access its actions
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -19,15 +22,17 @@ export default {
     };
   },
   methods: {
+    // Map Vuex actions to methods in this component
+    ...mapActions(['loginUser']),
     async login() {
       try {
-        const response = await axios.post('http://localhost:8888/login', {
+        // Call the Vuex action 'loginUser' to handle the login logic
+        const response = await this.loginUser({
           username: this.username,
           password: this.password
         });
-        console.log('User logged in:', response);
-        // You can store the JWT token here if needed
-        this.$cookies.set("authToken", response.data.token);
+        console.log("Server Response:", response);
+        // Redirect to the UserProfile page after successful login
         this.$router.push({ name: "UserProfile" });
       } catch (error) {
         console.error('An error occurred while logging in:', error);
@@ -36,6 +41,8 @@ export default {
   }
 };
 </script>
+
+
 
   <style scoped>
   .login {

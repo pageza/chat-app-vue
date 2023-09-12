@@ -1,4 +1,5 @@
 <template>
+  <!-- Registration form -->
   <div>
     <h1>Register</h1>
     <form @submit.prevent="register">
@@ -11,8 +12,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+// Import the Vuex store to access its actions
+import { mapActions } from 'vuex';
 
 export default {
   name: 'UserRegister',
@@ -23,22 +24,20 @@ export default {
       password: ''
     };
   },
-  setup() {
-    const router = useRouter();
-    return { router };
-  },
   methods: {
+    // Map Vuex actions to methods in this component
+    ...mapActions(['registerUser']),
     async register() {
       try {
-        const response = await axios.post('http://localhost:8888/register', {
+        // Call the Vuex action 'registerUser' to handle the registration logic
+        await this.registerUser({
           username: this.username,
           email: this.email,
           password: this.password
         });
-        console.log('User registered:', response);
-
-        // Redirect to profile page
-        this.router.push({ name: 'UserProfile' });
+        
+        // Redirect to the UserProfile page after successful registration
+        this.$router.push({ name: "UserProfile" });
       } catch (error) {
         console.error('An error occurred while registering:', error);
       }
@@ -46,3 +45,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Add your CSS styling here */
+</style>

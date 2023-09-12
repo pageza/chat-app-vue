@@ -1,70 +1,58 @@
 <template>
-    <div class="navbar">
-      <div class="container">
-        <div class="nav-item">
-          <router-link to="/">Home</router-link>
-        </div>
-        <div class="nav-item" v-if="!isLoggedIn">
-          <router-link to="/register">Register</router-link>
-        </div>
-        <div class="nav-item" v-if="!isLoggedIn">
-          <router-link to="/login">Login</router-link>
-        </div>
-        <div class="nav-item" v-else>
-          <button @click="logout">Logout</button>
-        </div>
+  <div class="navbar">
+    <div class="container">
+      <div class="nav-item">
+        <router-link to="/">Home</router-link>
+      </div>
+      <!-- Use Vuex getter to check if user is logged in -->
+      <div class="nav-item" v-if="!isAuthenticated">
+        <router-link to="/register">Register</router-link>
+      </div>
+      <div class="nav-item" v-if="!isAuthenticated">
+        <router-link to="/login">Login</router-link>
+      </div>
+      <div class="nav-item" v-else>
+        <button @click="logout">Logout</button>
       </div>
     </div>
-  </template>
-  
-  
-  <script>
-  import axios from 'axios'
+  </div>
+</template>
 
-  export default {
-    data() {
-      return {
-        isLoggedIn: false, // You'll replace this with real authentication status
-      };
-    },
-    methods: {
-      logout() {
-        // Clear token from cookies
-        this.$cookies.remove("authToken");
-  
-        // Redirect to login page
-        this.$router.push({ name: "login" });
-  
-        // Update isLoggedIn status
-        this.isLoggedIn = false;
-      },
-    },
-    mounted() {
-      // Check if user is logged in when component mounts
-      // Replace this with real authentication check
-      axios.get('/check-auth')
-        .then(response => {
-        this.isLoggedIn = response.data.authenticated;
-        })
-        .catch(error => {
-        console.error('An error occurred:', error);
-        });    
-    },
-    watch: {
-      // Watch for changes in the route
-      // eslint-disable-next-line
-      $route(to, from) {
-        axios.get('/check-auth')
-            .then(response => {
-                this.isLoggedIn = response.data.authenticated;
-            })
-            .catch(error => {
-                console.error('An error occurred:', error);
-            });
-        },
-    },
-  };
-  </script>
+<script>
+// Import Vuex mapGetters and mapActions to access store state and actions
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  computed: {
+    // Map Vuex getters to computed properties
+    ...mapGetters(['isAuthenticated'])
+  },
+  methods: {
+    // Map Vuex actions to methods
+    ...mapActions(['logoutUser', 'checkAuth']),
+    async logout() {
+      // Call Vuex action to handle logout
+      await this.logoutUser();
+      this.$router.push({ name: "UserLogin" });
+    }
+  },
+  async mounted() {
+    // Call Vuex action to check authentication status
+    await this.checkAuth();
+  },
+  watch: {
+    // Watch for changes in the route
+    // eslint-disable-next-line
+    async $route(to, from) {
+      // Call Vuex action to check authentication status
+      await this.checkAuth();
+    }
+  }
+};
+</script>
+
+
+
   
   <style>
   .navbar {
