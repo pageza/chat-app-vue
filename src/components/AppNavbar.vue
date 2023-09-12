@@ -37,17 +37,26 @@ export default {
     }
   },
   async mounted() {
+  try {
     // Call Vuex action to check authentication status
     await this.checkAuth();
-  },
-  watch: {
-    // Watch for changes in the route
-    // eslint-disable-next-line
-    async $route(to, from) {
+  } catch (error) {
+    console.error("Error during mounted hook:", error);
+  }
+},
+watch: {
+  // Watch for changes in the route
+  // eslint-disable-next-line
+  async $route(to, from) {
+    try {
       // Call Vuex action to check authentication status
       await this.checkAuth();
+    } catch (error) {
+      console.error("Error during route change:", error);
     }
   }
+}
+
 };
 </script>
 
