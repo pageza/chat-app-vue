@@ -67,7 +67,7 @@ watch: {
   .navbar {
     position: sticky;
     top: 0;
-    background-color: #333;
+    background-color: #427065;
     color: white;
     padding: 1rem;
   }
